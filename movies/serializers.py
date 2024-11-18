@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Movie, RatingChoices
 
 
-class MovieSerializer(serializers.ModelSerializer):
+class MovieSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(max_length=127)
     duration = serializers.CharField(max_length=10, required=False, allow_blank=True, default="")
@@ -25,7 +25,3 @@ class MovieSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Movie.objects.create(**validated_data)
-
-    class Meta:
-        model = Movie
-        fields = ['id', 'title', 'duration', 'rating', 'synopsis', 'added_by']
