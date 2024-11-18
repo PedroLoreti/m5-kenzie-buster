@@ -6,4 +6,5 @@ urlpatterns = [
     path('users/', UsersView.as_view()),
     path('users/login/', views.TokenObtainPairView.as_view()),
     path('token/refresh/', views.TokenRefreshView.as_view()),
+    path('users/<int:user_id>/', UsersView.as_view()),
 ]

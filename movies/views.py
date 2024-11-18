@@ -5,6 +5,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from movies.permissions import IsAdminOrReadOnly
 from movies.serializers import MovieSerializer
 from movies.models import Movie
+from rest_framework.pagination import PageNumberPagination
 
 
 class MoviesView(APIView):
@@ -28,8 +29,12 @@ class MoviesView(APIView):
             return Response(serializer.data, status=200)
 
         movies = Movie.objects.all()
-        serializer = MovieSerializer(movies, many=True)
-        return Response(serializer.data, status=200)
+        paginator = PageNumberPagination()
+        paginator.page_size = 2
+        paginated_movies = paginator.paginate_queryset(movies, request)
+        serializer = MovieSerializer(paginated_movies, many=True)
+        
+        return paginator.get_paginated_response(serializer.data)
 
     def delete(self, request: Request, movie_id: int) -> Response:
         try:
